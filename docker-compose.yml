@@ -1,0 +1,53 @@
+services:
+  chromadb:
+    image: chromadb/chroma:0.5.3
+    container_name: audit-chromadb
+    environment:
+      - ANONYMIZED_TELEMETRY=false
+      - IS_PERSISTENT=true
+    volumes:
+      - chroma_data:/chroma/chroma
+    ports:
+      - "8001:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/heartbeat')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  app:
+    build: .
+    container_name: audit-app
+    depends_on:
+      chromadb:
+        condition: service_healthy
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+      - DATA_DIR=/app/data
+      - DB_PATH=/app/db/audit.db
+      - ANONYMIZED_TELEMETRY=false
+    volumes:
+      - ./data:/app/data:ro
+      - sqlite_data:/app/db
+      - ./eval_results.json:/app/eval_results.json  # persist eval output to host
+    ports:
+      - "8000:8000"
+
+  ui:
+    build:
+      context: .
+      dockerfile: ui/Dockerfile
+    container_name: audit-ui
+    depends_on:
+      - app
+    environment:
+      - APP_URL=http://app:8000
+    ports:
+      - "8501:8501"
+
+volumes:
+  chroma_data:
+  sqlite_data:

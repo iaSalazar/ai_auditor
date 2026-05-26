@@ -1,0 +1,26 @@
+.env
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.db
+chroma_db/
+db/
+.pytest_cache/
+.DS_Store
+
+
+
+# macOS metadata noise from unzipped dataset
+__MACOSX/
+.DS_Store
+data/__MACOSX/
+
+# Dataset — excluded from the public repo (proprietary test material + copyrighted IAASB handbook).
+# See README "Dataset setup" for the file list and where to put them.
+data/northstar_robotics_audit_dataset/
+
+# Presentation deck (exported from Gamma)
+Audit-AI-Assistant-*.pdf
+*.pdf
