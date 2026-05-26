@@ -21,6 +21,3 @@ data/__MACOSX/
 # See README "Dataset setup" for the file list and where to put them.
 data/northstar_robotics_audit_dataset/
 
-# Presentation deck (exported from Gamma)
-Audit-AI-Assistant-*.pdf
-*.pdf
