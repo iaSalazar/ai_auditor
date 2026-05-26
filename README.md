@@ -387,7 +387,3 @@ finance_advisor/
 - **Docker Compose** — local execution + reproducibility
 
 ---
-
-## Credits
-
-Dataset is fictional. Built with Claude Code (Anthropic).
